@@ -1,6 +1,7 @@
 package com.lilith.android.wificontrolapp;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -20,12 +21,14 @@ import android.net.wifi.WifiNetworkSpecifier;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +36,8 @@ import java.util.List;
 public class SearchWifiActivity extends AppCompatActivity {
 
     private final String TAG = "SearchWifiActivity";
+    private final int WIFI_ENABLED = 1;
+    private final int GET_PERMISSION = 2;
 
     private RecyclerView rvSearchWifi;
     private LinearLayoutManager rvSearchWifiLayoutManager;
@@ -46,7 +51,6 @@ public class SearchWifiActivity extends AppCompatActivity {
 
     private Runnable searchWifi = () -> {
         new Thread(() -> {
-            wifiManager.setWifiEnabled(true);
             wifiManager.startScan();
             List<ScanResult> results = wifiManager.getScanResults();
 
@@ -89,10 +93,13 @@ public class SearchWifiActivity extends AppCompatActivity {
         rvSearchWifi = findViewById(R.id.rvSearchWifi);
 
         btnSearchWifi.setOnClickListener(v -> {
+
             if (!isPostSearchWifi) {
-                handler.post(searchWifi);
-                isPostSearchWifi = true;
-                btnSearchWifi.setText("暫停搜尋");
+                if (setWifiEnabled()) {
+                    handler.post(searchWifi);
+                    isPostSearchWifi = true;
+                    btnSearchWifi.setText("暫停搜尋");
+                }
             } else {
                 handler.removeCallbacks(searchWifi);
                 isPostSearchWifi = false;
@@ -107,6 +114,20 @@ public class SearchWifiActivity extends AppCompatActivity {
         rvSearchWifi.setAdapter(rvSearchWifiAdapter);
     }
 
+    private boolean setWifiEnabled() {
+        if (!wifiManager.isWifiEnabled()) {
+            boolean result = wifiManager.setWifiEnabled(true);
+            if (!result) {
+                // android api 29 level "wifiManager.setWifiEnabled" deprecation
+                Intent intent = new Intent(Settings.Panel.ACTION_INTERNET_CONNECTIVITY);
+                startActivityForResult(intent, WIFI_ENABLED);
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     @Override
     protected void onStop() {
         super.onStop();
@@ -115,10 +136,53 @@ public class SearchWifiActivity extends AppCompatActivity {
         btnSearchWifi.setText("搜尋WIFI");
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode) {
+            case GET_PERMISSION:
+                if (resultCode != RESULT_OK) {
+                    Toast.makeText(this, "請接受授權", Toast.LENGTH_SHORT).show();
+                    finish();
+                }
+                break;
+            case WIFI_ENABLED:
+                if (wifiManager.isWifiEnabled()) {
+                    handler.post(searchWifi);
+                    isPostSearchWifi = true;
+                    btnSearchWifi.setText("暫停搜尋");
+                } else {
+                    Toast.makeText(this, "請開啟WIFI", Toast.LENGTH_SHORT).show();
+                }
+                break;
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        switch (requestCode)
+        {
+            case GET_PERMISSION:
+                for (int index = 0; index < grantResults.length; index++) {
+                    int grantResult = grantResults[index];
+                    String permission = permissions[index];
+                    boolean result = grantResult == PackageManager.PERMISSION_GRANTED;
+
+                    if(!result){
+                        Toast.makeText(this, "請接受授權", Toast.LENGTH_SHORT).show();
+                        finish();
+                        break;
+                    }
+                }
+                break;
+        }
+    }
+
     private void getPermission() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M &&
-                ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, GET_PERMISSION);
         }
     }
 
