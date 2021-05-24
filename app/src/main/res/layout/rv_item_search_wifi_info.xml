@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/tvWifiName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="12dp"
+        android:textAlignment="center"
+        android:textSize="24sp"
+        tools:text="MumuNet" />
+
+    <TextView
+        android:id="@+id/tvAddresssLabel"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvWifiName"
+        android:paddingEnd="8dp"
+        android:text="位置"
+        android:textAlignment="textEnd" />
+
+    <TextView
+        android:id="@+id/tvAddress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvWifiName"
+        android:layout_toEndOf="@+id/tvAddresssLabel"
+        tools:text="ee:49:f5:f0:09:c4" />
+
+    <TextView
+        android:id="@+id/tvEncryptionTypeLabel"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvAddress"
+        android:paddingEnd="8dp"
+        android:text="加密類型"
+        android:textAlignment="textEnd" />
+
+    <TextView
+        android:id="@+id/tvEncryptionType"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvAddress"
+        android:layout_toEndOf="@+id/tvEncryptionTypeLabel"
+        tools:text="[WPA2-Personal]" />
+
+    <TextView
+        android:id="@+id/tvFrequencyLabel"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvEncryptionType"
+        android:paddingEnd="8dp"
+        android:text="訊號頻率"
+        android:textAlignment="textEnd" />
+
+    <TextView
+        android:id="@+id/tvFrequency"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvEncryptionType"
+        android:layout_toEndOf="@+id/tvFrequencyLabel"
+        tools:text="2646" />
+
+    <TextView
+        android:id="@+id/tvStrengthLabel"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvFrequency"
+        android:paddingEnd="8dp"
+        android:text="訊號強度"
+        android:textAlignment="textEnd" />
+
+    <TextView
+        android:id="@+id/tvStrength"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvFrequency"
+        android:layout_marginBottom="12dp"
+        android:layout_toEndOf="@+id/tvStrengthLabel"
+        tools:text="60" />
+
+    <Button
+        android:id="@+id/btnConnection"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvStrength"
+        android:text="連線" />
+
+
+</RelativeLayout>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".SearchWifiActivity">
+
+    <Button
+        android:id="@+id/btnSearchWifi"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="搜尋WIFI" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvSearchWifi"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:itemCount="20"
+        tools:listitem="@layout/rv_item_search_wifi_info">
+
+    </androidx.recyclerview.widget.RecyclerView>
+
+</LinearLayout>

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:padding="16dp"
+    tools:context=".ConnectionWifiActivity">
+
+    <TextView
+        android:id="@+id/tvSubject"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="WIFI設定"
+        android:textAlignment="center"
+        android:textSize="24sp" />
+
+    <EditText
+        android:id="@+id/etSSID"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="enter ssid"
+        android:inputType="textPersonName"
+        tools:text="MumuNet" />
+
+    <EditText
+        android:id="@+id/etPassphrase"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="enter passphrase"
+        android:inputType="textPassword"
+        tools:text="11111111" />
+
+    <Button
+        android:id="@+id/btnConnection"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="連線" />
+
+    <Button
+        android:id="@+id/btnWifiList"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="WIFI列表" />
+</LinearLayout>
